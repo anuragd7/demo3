@@ -1,0 +1,426 @@
+<GridLayout rows="auto *" actionBarHidden="true" height="100%">
+
+    <!-- Phone Layout -->
+    <StackLayout *ngIf="!isTablet" row="0" rowSpan="3">
+        <slides visibility="{{formReady ? 'visible' : 'collapse'}}" #slides pageHeight="100%" footerMarginTop="90%" [formGroup]="registrationFormGroup">
+            <slide>
+                <GridLayout rows="auto auto auto auto auto auto *" columns="* auto *" height="80%" width="100%">
+                    <Label row="0" col="1" class="reg-title" horizontalAlignment="center" width="80%" textWrap="true">
+                        <FormattedString>
+                            <Span text="Hi" color="#fa4032" textWrap="true" horizontalAlignment="center"></Span>
+                        </FormattedString>
+                    </Label>
+                    <TextField row="1" col="0" colSpan="4" id="regInput" hint="Name" class="abel reg-name" autocorrect="false" autocapitalizationType="words" [(ngModel)]="displayName" [formControlName]="'nameInput'"></TextField>
+                    <Label row="2" col="1" class="abel" text="Register and get 500 welcome points!" textWrap="true" horizontalAlignment="center" marginBottom="2%"></Label>
+                    
+                    <Image row="3" col="1" [src]="displayImage" stretch="aspectFill" class="img-profile"></Image>
+                    <Button visibility="{{displayImage ? 'collapse' : 'visible' }}" row="4" col="1" text="UPLOAD PROFILE PICTURE?" (tap)="getImageDialog()" class="btn-login abel" marginTop="5%" color="white" width="60%"></Button>
+                    <Label visibility="{{displayImage ? 'collapse' : 'visible' }}" row="5" col="1" text="Only if you want to!" class="abel reg-name m-x-10" textWrap="true"></Label>
+                    <Label *ngIf="displayName !==''" row="6" col="0" colSpan="4" text="If you would like us to address you differently, go ahead and change the name. Else just press Next!" class="abel reg-name m-x-10" [marginTop]="messageTopMargin" marginBottom="3%" textWrap="true"></Label>
+                    <Label *ngIf="displayName ===''" row="6" col="0" colSpan="4" text="Please share your name, so that we can address you correctly." class="abel reg-name m-x-10" [marginTop]="messageTopMargin" marginBottom="3%" textWrap="true"></Label>
+                </GridLayout>
+                <AbsoluteLayout *ngIf="displayName !==''" height="20%">
+                    <Button [left]="screenHeight" width="20%" height="30%" class="reg-next" (tap)="onChanged()" horizontalAlignment="right">
+                        <FormattedString>
+                            <Span row="0" col="1" text="NEXT  " class="font-16 abel color-pink"></Span>
+                            <Span text="&#xe040;" class="icomoon1 font-16 color-pink"></Span>
+                        </FormattedString>  
+                    </Button>
+                    <!-- <Button top="5%" [left]="screenHeight" width="20%" height="30%" text="Next" (tap)="onChanged()" class="reg-next abel" color="white"></Button> -->
+                </AbsoluteLayout>
+            </slide>
+            <slide>
+                <GridLayout rows="auto auto *" height="80%" width="100%">
+                    <Label row="0" class="reg-title" horizontalAlignment="center" height="16%" ios:width="80%" android:width="90%" textWrap="true">
+                        <FormattedString>
+                            <Span text="Which grades do you set tests for most often? (Select all that are relevant)" color="#fa4032" horizontalAlignment="center"></Span>
+                        </FormattedString>
+                    </Label>
+                    <!-- GRADE BUTTONS -->
+                    <GridLayout row="1" rows="auto" columns="* * * * *" class="m-x-2" marginTop="15%" height="auto" verticalAlignment="center" horizontalAlignment="left">
+                            <GridLayout row="0" col="0" rows="auto auto" class="reg-buttons1" height="8%" marginLeft="1%" (tap)="onPrePrimarySelected()" verticalAlignment="center" [ngClass]="{ 'reg-selected': gradesEnrolled['Pre-Primary']}">
+                                <Label row="0" text="&#xe013;" class="icomoon1 font-24 m-y-10" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Pre-Primary']}" ></Label>
+                                <Label row="1" text="PreSchool" class="abel reg-icon-text1 font-14" textWrap="true" verticalAlignment="center" [ngClass]="{ 'reg-selected': gradesEnrolled['Pre-Primary']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="1" rows="auto auto" class="reg-buttons1" marginLeft="1%" (tap)="onEarlyPrimarySelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['Early Primary (1-2)']}">
+                                <Label row="0" text="&#xe014;" class="icomoon1 font-24 m-y-10" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Early Primary (1-2)']}"></Label>
+                                <Label row="1" text="1-2" class="abel reg-icon-text1 font-14" textWrap="true" verticalAlignment="center" [ngClass]="{ 'reg-selected': gradesEnrolled['Early Primary (1-2)']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="2" rows="auto auto" class="reg-buttons1" marginLeft="1%" (tap)="onPrimarySelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['Primary (3-5)']}">
+                                <Label row="0" text="&#xe015;" class="icomoon1 font-24 m-y-10" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Primary (3-5)']}"></Label>
+                                <Label row="1" text="3-5" class="abel reg-icon-text1 font-14" textWrap="true" verticalAlignment="center" [ngClass]="{ 'reg-selected': gradesEnrolled['Primary (3-5)']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="3" rows="auto auto" class="reg-buttons1" marginLeft="1%" (tap)="onMiddleSelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['Middle School (6-8)']}">
+                                <Label row="0" text="&#xe016;" class="icomoon1 font-24 m-y-10" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Middle School (6-8)']}"></Label>
+                                <Label row="1" text="6-8" class="abel reg-icon-text1 font-14" textWrap="true" verticalAlignment="center" [ngClass]="{ 'reg-selected': gradesEnrolled['Middle School (6-8)']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="4" rows="auto auto" class="reg-buttons1" marginLeft="1%" (tap)="onHighSelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['High School (9-10)']}">
+                                <Label row="0" text="&#xe018;" class="icomoon1 font-24 m-y-10" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['High School (9-10)']}"></Label>
+                                <Label row="1" text="9-10" class="abel reg-icon-text1 font-14" textWrap="true" verticalAlignment="center" [ngClass]="{ 'reg-selected': gradesEnrolled['High School (9-10)']}"></Label>
+                            </GridLayout>
+                        </GridLayout>
+                    <Label row="2" text="Your choices only help you get more relevant questions, without restricting the questions you can find. You can change your preferences any time." class="abel reg-name m-x-10" textWrap="true"></Label>
+                </GridLayout>
+
+                <AbsoluteLayout *ngIf="gradeSelected" height="20%">
+                    <Button [left]="screenHeight" width="20%" height="30%" class="reg-next" (tap)="onChanged()" horizontalAlignment="right">
+                        <FormattedString>
+                            <Span row="0" col="1" text="NEXT  " class="font-16 abel color-pink"></Span>
+                            <Span text="&#xe040;" class="icomoon1 font-16 color-pink"></Span>
+                        </FormattedString>  
+                    </Button>
+                </AbsoluteLayout>
+            </slide>
+            <slide>
+                <GridLayout rows="auto auto *" height="80%" width="100%">
+                    <Label row="0" class="reg-title" horizontalAlignment="center" height="16%" width="80%" textWrap="true">
+                        <FormattedString>
+                            <Span text="Which subjects are of interest to you?" color="#fa4032" horizontalAlignment="center"></Span>
+                        </FormattedString>
+                    </Label>
+                     <!-- SUBJECT OPTIONS -->
+                    <GridLayout row="1" marginTop="15%" rows="auto" columns="* * * * *" class="m-x-2" verticalAlignment="center" horizontalAlignment="center">
+                            <GridLayout row="0" col="1" rows="auto auto" class="reg-buttons1" marginLeft="1%" (tap)="onMathSelected('single')" [ngClass]="{ 'reg-selected': subjectsEnrolled['Math']}" horizontalAlignment="center">
+                                <Label row="0" text="&#xe007;" class="icomoon1 font-24 m-y-10" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['Math'], 'm-b-10': isTablet}"></Label>
+                                <Label row="1" text="Math" class="abel reg-icon-text1 font-14" textWrap="true" verticalAlignment="center" [ngClass]="{ 'reg-selected': subjectsEnrolled['Math']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="2" rows="auto auto" class="reg-buttons1" marginLeft="1%" (tap)="onEnglishSelected('single')" [ngClass]="{ 'reg-selected': subjectsEnrolled['English']}" horizontalAlignment="center">
+                                <Label row="0" text="&#xe006;" class="icomoon1 font-24 m-y-10" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['English'], 'm-b-10': isTablet}"></Label>
+                                <Label row="1" text="English" class="abel reg-icon-text1 font-14" textWrap="true" verticalAlignment="center" [ngClass]="{ 'reg-selected': subjectsEnrolled['English']}"></Label>
+                            </GridLayout><GridLayout row="0" col="3" rows="auto auto" class="reg-buttons1" marginLeft="1%" (tap)="onScienceSelected('single')" [ngClass]="{ 'reg-selected': subjectsEnrolled['Science']}" horizontalAlignment="center">
+                                <Label row="0" text="&#xe010;" class="icomoon1 font-24 m-y-10" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['Science'], 'm-b-10': isTablet}"></Label>
+                                <Label row="1" text="Science" class="abel reg-icon-text1 font-14" textWrap="true" verticalAlignment="center" [ngClass]="{ 'reg-selected': subjectsEnrolled['Science']}"></Label>
+                        </GridLayout>      
+                    </GridLayout>
+                    <Label row="2" text="You guessed it!  Your choices wont restrict you in any way and you can change them anytime you like." class="abel reg-name m-x-10" textWrap="true"></Label>
+                </GridLayout>
+                <AbsoluteLayout *ngIf="subjectSelected" height="20%">
+                        <Button [left]="screenHeight" width="20%" height="30%" class="reg-next" (tap)="onChanged()" horizontalAlignment="right">
+                            <FormattedString>
+                                <Span row="0" col="1" text="NEXT  " class="font-16 abel color-pink"></Span>
+                                <Span text="&#xe040;" class="icomoon1 font-16 color-pink"></Span>
+                            </FormattedString>  
+                        </Button>
+                </AbsoluteLayout>
+            </slide>
+            <slide>
+                <GridLayout rows="auto auto * auto" height="80%" width="100%">
+                    <Label row="0" class="reg-title" horizontalAlignment="center" height="16%" width="80%" textWrap="true">
+                        <FormattedString>
+                            <Span text="How often do you set tests or quizzes?" color="#fa4032" horizontalAlignment="center"></Span>
+                        </FormattedString>
+                    </Label>
+                    <GridLayout row="1" rows="auto" columns="* * * *" marginTop="15%" class="m-x-2" verticalAlignment="center" horizontalAlignment="center">
+                        <GridLayout row="0" col="0" rows="auto auto" class="reg-buttons1" marginLeft="1%" (tap)="everydaySelected()" [ngClass]="{ 'reg-selected': testFrequency=='everyday'}">
+                                <Label row="0" horizontalAlignment="center" textWrap="true">
+                                        <FormattedString>
+                                            <Span  text="&#xe041; &#xe041; &#xe041; &#xe041;" class="icomoon1 reg-repeat-icon" [ngClass]="{ 'reg-selected': testFrequency=='everyday'}"></Span>
+                                            <Span  text="  " class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='everyday'}"></Span>
+                                            <Span  text="  " class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='everyday'}"></Span>
+                                        </FormattedString>
+                                </Label>
+                                <Label row="1" text="Everyday" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='everyday'}"></Label>
+                        </GridLayout>
+                        <GridLayout row="0" col="1" rows="auto auto auto" class="reg-buttons1" marginLeft="1%" (tap)="weekSelected()" [ngClass]="{ 'reg-selected': testFrequency=='week'}">
+                                <Label row="0" text="&#xe041; &#xe041; &#xe041;" class="icomoon1 reg-repeat-icon" [ngClass]="{ 'reg-selected': testFrequency=='week'}" horizontalAlignment="center" textWrap="true"></Label>
+                                <Label row="1" text="   " height="14%" textWrap="true"></Label>
+                                <Label row="2" text="Once a week" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='week'}"></Label>
+                        </GridLayout>
+                       
+                        <GridLayout row="0" col="2" rows="auto auto auto" class="reg-buttons1" marginLeft="1%" (tap)="fortnightSelected()" [ngClass]="{ 'reg-selected': testFrequency=='fortnight'}">
+                            <Label row="0" text="&#xe041; &#xe041;" class="icomoon1 reg-repeat-icon" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='fortnight'}"></Label>
+                            <Label row="1" text="   " height="14%" textWrap="true"></Label>
+                            <Label row="2" text="Once a fortnight" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='fortnight'}" verticalAlignment="bottom"></Label>
+                        </GridLayout>
+                        <GridLayout row="0" col="3" rows="auto auto auto" class="reg-buttons1" marginLeft="1%" (tap)="monthSelected()" [ngClass]="{ 'reg-selected': testFrequency=='month'}">
+                            <Label row="0" text="&#xe041;" class="icomoon1 reg-repeat-icon" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='month'}"></Label>
+                            <Label row="1" text="   " height="14%" textWrap="true"></Label>
+                            <Label row="2" text="Once a month" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='month'}"></Label>
+                        </GridLayout>
+                    </GridLayout>
+                    <GridLayout row="2" rows="auto" columns="auto * auto" verticalAlignment="center">
+                        <Label row="0" col="1" colSpan="2" text="Send me reminders" class="abel reg-message" marginLeft="15%" textWrap="true"></Label>
+                        <Switch row="0" col="2" #sw1 [checked]="testReminders" class="pink-bg" marginRight="20%" (checkedChange)="changeRemindMe(sw1.checked)" horizontalAlignment="left"></Switch>
+                    </GridLayout>
+                </GridLayout>
+
+                <AbsoluteLayout *ngIf="frequencySelected" height="20%">
+                        <Button [left]="screenHeight" width="20%" height="30%" class="reg-next" (tap)="onChanged()" horizontalAlignment="right">
+                            <FormattedString>
+                                <Span row="0" col="1" text="NEXT  " class="font-16 abel color-pink"></Span>
+                                <Span text="&#xe040;" class="icomoon1 font-16 color-pink"></Span>
+                            </FormattedString>  
+                        </Button>
+                </AbsoluteLayout>
+                <!-- <AbsoluteLayout *ngIf="frequencySelected" height="20%">
+                    <Button top="5%" [left]="screenHeight" width="20%" height="30%" text="Next" (tap)="onChanged()" class="reg-next abel" color="white"></Button>
+                </AbsoluteLayout> -->
+            </slide>
+            <slide>
+                <GridLayout rows="auto auto * auto" height="80%" width="100%">
+                    <Label row="0" class="reg-title" horizontalAlignment="center" height="16%" width="80%" textWrap="true">
+                        <FormattedString>
+                            <Span text="Almost done! Just verify your location and phone-number." color="#fa4032" horizontalAlignment="center"></Span>
+                        </FormattedString>
+                    </Label>
+                    <GridLayout row="1" rows="auto auto" columns="* auto *" class="m-l-0 m-r-0 p-0" marginTop="15%" verticalAlignment="center" horizontalAlignment="center" width="100%" height="30%">
+                        <GridLayout *ngIf="!gotAddress && permissionStatus " row="0" col="1" rows="auto" columns="auto auto" class="reg-location" (tap)="openModal()">
+                            <Label row="0" col="0" text="&#xf0ac;" class="fa reg-icon" color="white" textWrap="true"></Label>
+                            <Label row="1" col="1" text=" Get Location" class="abel" verticalAlignment="center" marginLeft="5%" color="white" textWrap="true"></Label>
+                        </GridLayout>
+                        <Label *ngIf="!permissionStatus" row="0" col="0" colSpan="3" text="We could not get your location. Please select your country below." class="abel reg-name" textWrap="true"></Label>
+
+                        <!-- COUNTRY SELECT BOX USED WHEN LOCATION DETECTION FAILS -->
+                        <GridLayout row="1" col="0" colSpan="3" visibility="{{ !permissionStatus ? 'visible' : 'collapsed' }}" rows="auto auto" columns="3* 8* 3*" class="bottom-margin-15 left-margin-10 right-margin-10" width="100%" borderColor="#fef3e2" borderWidth="5">
+                            <Button row="0" col="1" text="Select Country" class="btn-dgray btn-tag left-margin-5 top-margin-5 bottom-margin-10" (tap)="opened()" horizontalAlignment="left" width="100%"></Button>
+                            <StackLayout row="0" col="1" colSpan="2" width="100%" class="left-margin-15 right-margin-5" textWrap="true" verticalAlignment="middle">
+                                <FilterSelect (open)="opened()" #myCountries [items]="countryList" textWrap="true" hint="" modal_title="COUNTRIES" [item_template]="item_template" xbtn="&#xf057;" closeText="Back" search_param="name" primary_key="name" (change)="onCountrySelected($event)"
+                                    selectText="" multiple="false"></FilterSelect>
+                            </StackLayout>
+                        </GridLayout>
+
+
+                        <GridLayout *ngIf="gotAddress" row="0" col="1" rows="auto" height="40%" width="50%" horizontalAlignment="center">
+                            <Label row="0" text={{user.country}} class="abel reg-name all-caps" textWrap="true"></Label>
+                        </GridLayout>
+                        <TextField *ngIf="showPhoneNumber" row="1" col="0" colSpan="3" id="regInput" hint="Phone number" keyboardType="number" class="abel reg-name" [formControlName]="'phoneNumber'" height="40%"></TextField>
+                    </GridLayout>
+                    <Label *ngIf="!gotAddress" row="2" col="0" colSpan="3" text="To see questions that are more relevant for your country. One time access only!" class="abel reg-name" textWrap="true"></Label>
+                    <Label *ngIf="gotAddress && !showPhoneNumber" row="2" col="0" colSpan="3" text="The phone number protects your account if you are locked out of your account." class="abel reg-name" textWrap="true"></Label>
+                </GridLayout>
+
+                <AbsoluteLayout *ngIf="showPhoneNumber" height="20%">
+                    <Button top="5%" [left]="screenHeight/ 2" width="20%" height="30%" text="Submit" (tap)="checkForm()" class="reg-next abel color-pink"></Button>
+                </AbsoluteLayout>
+            </slide>
+        </slides>
+    </StackLayout>
+
+     <!-- Tablet Layout -->
+     <StackLayout *ngIf="isTablet" row="0" rowSpan="3">
+            <slides visibility="{{formReady ? 'visible' : 'collapse'}}" #slides pageHeight="90%" footerMarginTop="70%" [formGroup]="registrationFormGroup">
+                <slide>
+                    <GridLayout rows="auto auto auto auto auto auto *" columns="* auto *" height="85%" width="100%">
+                        <Label row="0" col="1" class="reg-title" horizontalAlignment="center" width="80%" textWrap="true">
+                            <FormattedString>
+                                <Span text="Hi" textWrap="true" horizontalAlignment="center"></Span>
+                            </FormattedString>
+                        </Label>
+                        <TextField row="1" col="0" colSpan="4" id="regInput" hint="Name" class="abel reg-name" autocorrect="false" autocapitalizationType="words" [(ngModel)]="displayName" [formControlName]="'nameInput'"></TextField>
+                        <Label row="2" col="1" class="abel" text="Register and get 500 welcome points!" textWrap="true" horizontalAlignment="center" marginBottom="2%"></Label>
+                        <Image row="3" col="1" [src]="displayImage" stretch="aspectFill" class="img-profile"></Image>
+                        <Button visibility="{{displayImage ? 'collapse' : 'visible' }}" row="4" col="1" text="UPLOAD PROFILE PICTURE?" (tap)="getImageDialog()" class="btn-login abel m-t-5" color="white" width="30%"></Button>
+                        <Label visibility="{{displayImage ? 'collapse' : 'visible' }}" row="5" col="1" text="Only if you want to!" class="abel reg-name" textWrap="true"></Label>
+                        <Label *ngIf="displayName !==''" row="6" col="0" colSpan="4" text="If you would like us to address you differently, go ahead and change the name. Else just press Next." class="abel reg-name m-x-10" marginTop="8%" marginBottom="3%" textWrap="true"></Label>
+                        <Label *ngIf="displayName ===''" row="6" col="0" colSpan="4" text="Please share your name, so that we can address you correctly." class="abel reg-name" marginLeft="3%" marginRight="3%" marginTop="8%" marginBottom="3%" textWrap="true"></Label>
+                    </GridLayout>
+
+                    <AbsoluteLayout *ngIf="displayName !==''" height="15%">
+                        <Button [left]="screenHeight" width="20%" height="40%" class="reg-next" (tap)="onChanged()" horizontalAlignment="right">
+                            <FormattedString>
+                                <Span row="0" col="1" text="NEXT   " class="font-20 abel color-pink"></Span>
+                                <Span text="&#xe040;" class="icomoon1 font-20 color-pink"></Span>
+                            </FormattedString>  
+                        </Button>
+                    </AbsoluteLayout>
+                </slide>
+                <slide>
+                    <GridLayout rows="auto auto *" height="85%" width="100%">
+                        <Label row="0" class="reg-title" horizontalAlignment="center" height="16%" width="80%" textWrap="true">
+                            <FormattedString>
+                                <Span text="Which grades do you set tests for most often? (Select all that are relevant)" color="#fa4032" horizontalAlignment="center"></Span>
+                            </FormattedString>
+                        </Label>
+                        <GridLayout row="1" rows="auto" columns="* * * * *" class="m-l-0 m-r-0 p-0" marginTop="15%" height="30%" verticalAlignment="center" horizontalAlignment="center">
+                            <GridLayout row="0" col="0" rows="auto auto" class="reg-buttons1 left-margin-10 right-margin-10" (tap)="onPrePrimarySelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['Pre-Primary']}">
+                                <Label row="0" text="&#xe013;" class="icomoon1 reg-icon" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Pre-Primary']}"></Label>
+                                <Label row="1" text="Pre-Primary" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Pre-Primary']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="1" rows="auto auto" class="reg-buttons1 left-margin-10 right-margin-10" (tap)="onEarlyPrimarySelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['Early Primary (1-2)']}">
+                                <Label row="0" text="&#xe014;" class="icomoon1 reg-icon" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Early Primary (1-2)']}"></Label>
+                                <Label row="1" text="Early Primary" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Early Primary (1-2)']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="2" rows="auto auto" class="reg-buttons1 left-margin-10 right-margin-10" (tap)="onPrimarySelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['Primary (3-5)']}">
+                                <Label row="0" text="&#xe015;" class="icomoon1 reg-icon" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Primary (3-5)']}"></Label>
+                                <Label row="1" text="Primary" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Primary (3-5)']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="3" rows="auto auto" class="reg-buttons1 left-margin-10 right-margin-10" (tap)="onMiddleSelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['Middle School (6-8)']}">
+                                <Label row="0" text="&#xe016;" class="icomoon1 reg-icon" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Middle School (6-8)']}"></Label>
+                                <Label row="1" text="Middle School" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['Middle School (6-8)']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="4" rows="auto auto" class="reg-buttons1 left-margin-10 right-margin-10" (tap)="onHighSelected()" [ngClass]="{ 'reg-selected': gradesEnrolled['High School (9-10)']}">
+                                <Label row="0" text="&#xe018;" class="icomoon1 reg-icon" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['High School (9-10)']}"></Label>
+                                <Label row="1" text="High School" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': gradesEnrolled['High School (9-10)']}"></Label>
+                            </GridLayout>
+                        </GridLayout>
+                        <Label row="2" text="Your choices will help you see more relevant questions. Don’t worry this wont restrict the questions you can find you can change your preferences any time." class="abel reg-name" textWrap="true"></Label>
+                    </GridLayout>
+                    <AbsoluteLayout *ngIf="gradeSelected" height="15%">
+                        <Button [left]="screenHeight" width="20%" height="40%" class="reg-next" (tap)="onChanged()" horizontalAlignment="right">
+                            <FormattedString>
+                                <Span row="0" col="1" text="NEXT   " class="font-20 abel color-pink"></Span>
+                                <Span text="&#xe040;" class="icomoon1 font-20 color-pink"></Span>
+                            </FormattedString>  
+                        </Button>
+                    </AbsoluteLayout>
+                </slide>
+                <slide>
+                    <GridLayout rows="auto auto * auto" height="85%" width="100%">
+                        <Label row="0" class="reg-title" horizontalAlignment="center" height="16%" width="80%" textWrap="true">
+                            <FormattedString>
+                                <Span text="Which subjects are of interest to you?" color="#fa4032" horizontalAlignment="center"></Span>
+                            </FormattedString>
+                        </Label>
+                        <GridLayout row="1" rows="auto" columns="* * *" class="m-l-0 m-r-0 p-0" marginTop="15%" height="30%" verticalAlignment="center" horizontalAlignment="center">
+                            <GridLayout row="0" col="0" rows="auto auto" class="reg-buttons1 left-margin-10 right-margin-10" (tap)="onMathSelected()" [ngClass]="{ 'reg-selected': subjectsEnrolled['Math']}">
+                                <Label row="0" text="&#xe007;" class="icomoon1 reg-icon" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['Math']}"></Label>
+                                <Label row="1" text="Math" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['Math']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="1" rows="auto auto" class="reg-buttons1 left-margin-10 right-margin-10" (tap)="onEnglishSelected()" [ngClass]="{ 'reg-selected': subjectsEnrolled['English']}">
+                                <Label row="0" text="&#xe006;" class="icomoon1 reg-icon" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['English']}"></Label>
+                                <Label row="1" text="English" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['English']}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="2" rows="auto auto" class="reg-buttons1 left-margin-10 right-margin-10" (tap)="onScienceSelected()" [ngClass]="{ 'reg-selected': subjectsEnrolled['Science']}">
+                                <Label row="0" text="&#xe010;" class="icomoon1 reg-icon" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['Science']}"></Label>
+                                <Label row="1" text="Science" class="abel reg-icon-text" textWrap="true" [ngClass]="{ 'reg-selected': subjectsEnrolled['Science']}"></Label>
+                            </GridLayout>
+                        </GridLayout>
+                        <Label row="2" text="You guessed it!  Your choices wont restrict you in any way and you can change them anytime you like" class="abel reg-name" textWrap="true"></Label>
+                    </GridLayout>
+                    <AbsoluteLayout *ngIf="subjectSelected" height="15%">
+                        <Button [left]="screenHeight" width="20%" height="40%" class="reg-next" (tap)="onChanged()" horizontalAlignment="right">
+                            <FormattedString>
+                                <Span row="0" col="1" text="NEXT   " class="font-20 abel color-pink"></Span>
+                                <Span text="&#xe040;" class="icomoon1 font-20 color-pink"></Span>
+                            </FormattedString>  
+                        </Button>
+                    </AbsoluteLayout>
+                </slide>
+                <slide>
+                    <GridLayout rows="auto auto * auto" height="85%" width="100%">
+                        <Label row="0" class="reg-title" horizontalAlignment="center" height="16%" width="80%" textWrap="true">
+                            <FormattedString>
+                                <Span text="How often do you set tests or quizzes?" color="#fa4032" horizontalAlignment="center"></Span>
+                            </FormattedString>
+                        </Label>
+                        <GridLayout row="1" rows="auto" columns="* * * *" class="m-l-0 m-r-0 p-0" marginTop="15%" height="30%" verticalAlignment="center" horizontalAlignment="center">
+                            <GridLayout row="0" col="0" rows="auto auto" class="reg-buttons1" (tap)="everydaySelected()" [ngClass]="{ 'reg-selected': testFrequency=='everyday'}">
+                                <Label row="0" text="&#xe041; &#xe041; &#xe041; &#xe041;" class="icomoon1 reg-repeat-icon" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='everyday'}" height="60vh"></Label>
+                                <Label row="1" text="Everyday" class="abel reg-icon-text1" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='everyday'}"></Label>
+                            </GridLayout>
+    
+                            <GridLayout row="0" col="1" rows="auto auto" class="reg-buttons1" (tap)="weekSelected()" [ngClass]="{ 'reg-selected': testFrequency=='week'}">
+                                <Label row="0" text="&#xe041; &#xe041; &#xe041;" class="icomoon1 reg-repeat-icon" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='week'}" height="60vh"></Label>
+                                <Label row="1" text="At least once a week" class="abel reg-icon-text1" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='week'}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="2" rows="auto auto" class="reg-buttons1" (tap)="fortnightSelected()" [ngClass]="{ 'reg-selected': testFrequency=='fortnight'}">
+                                <Label row="0" text="&#xe041; &#xe041;" class="icomoon1 reg-repeat-icon" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='fortnight'}" height="60vh"></Label>
+                                <Label row="1" text="Once in a fortnight" class="abel reg-icon-text1" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='fortnight'}"></Label>
+                            </GridLayout>
+                            <GridLayout row="0" col="3" rows="auto auto" class="reg-buttons1" marginRight="3%" (tap)="monthSelected()" [ngClass]="{ 'reg-selected': testFrequency=='month'}">
+                                <Label row="0" text="&#xe041;" class="icomoon1 reg-repeat-icon" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='month'}" height="60vh"></Label>
+                                <Label row="1" text="Once a month" class="abel reg-icon-text1" textWrap="true" [ngClass]="{ 'reg-selected': testFrequency=='month'}"></Label>
+                            </GridLayout>
+                        </GridLayout>
+                        <GridLayout row="2" rows="auto" columns="auto * auto" verticalAlignment="center">
+                            <Label row="0" col="1" colSpan="2" text="Send me reminders" class="abel reg-message" marginLeft="15%" textWrap="true"></Label>
+                            <Switch row="0" col="2" #sw1 [checked]="testReminders" class="pink-bg" marginRight="20%" (checkedChange)="changeRemindMe(sw1.checked)" horizontalAlignment="left"></Switch>
+                        </GridLayout>
+                    </GridLayout>
+                    <AbsoluteLayout *ngIf="frequencySelected" height="15%">
+                        <Button [left]="screenHeight" width="20%" height="40%" class="reg-next" (tap)="onChanged()" horizontalAlignment="right">
+                            <FormattedString>
+                                <Span row="0" col="1" text="NEXT   " class="font-20 abel color-pink"></Span>
+                                <Span text="&#xe040;" class="icomoon1 font-20 color-pink"></Span>
+                            </FormattedString>  
+                        </Button>
+                    </AbsoluteLayout>
+                </slide>
+                <slide>
+                    <GridLayout rows="auto auto * auto" height="80%" width="100%">
+                        <Label row="0" class="reg-title" horizontalAlignment="center" height="16%" width="80%" textWrap="true">
+                            <FormattedString>
+                                <Span text="Almost done! Just verify your location and phone-number." color="#fa4032" horizontalAlignment="center"></Span>
+                            </FormattedString>
+                        </Label>
+                        <GridLayout row="1" rows="auto auto" columns="* auto *" class="m-l-0 m-r-0 p-0" marginTop="15%" verticalAlignment="center" horizontalAlignment="center" width="100%" height="30%">
+                            <GridLayout *ngIf="!gotAddress" row="0" col="1" rows="auto" columns="auto auto" class="reg-location" (tap)="userPermissionGranted()">
+                                <Label row="0" col="0" text="&#xf0ac;" class="fa reg-icon" padding="5%" marginTop="10vh" color="white" textWrap="true"></Label>
+                                <Label row="1" col="1" text=" Get Location" class="abel" color="white" fontSize="30%" verticalAlignment="center" padding="10%" textWrap="true"></Label>
+                            </GridLayout>
+                            <GridLayout *ngIf="gotAddress" row="0" col="0" colSpan="3" rows="auto" height="40%" width="50%" horizontalAlignment="center">
+                                <Label row="0" text={{user.country}} class="abel reg-name all-caps" textWrap="true"></Label>
+                            </GridLayout>
+                            <TextField *ngIf="showPhoneNumber" row="1" col="0" colSpan="3" id="regInput" hint="Phone number" keyboardType="number" class="abel reg-name" [(ngModel)]="phoneNumber" [formControlName]="'phoneNumber'" height="40%"></TextField>
+                        </GridLayout>
+                        <Label *ngIf="!gotAddress" row="2" col="0" colSpan="3" text="To see questions that are more relevant for your country. One time access only!" class="abel reg-name" textWrap="true"></Label>
+                        <Label *ngIf="gotAddress && !showPhoneNumber" row="2" col="0" colSpan="3" text="The phone number protects your account if you are locked out of your account." class="abel reg-name" textWrap="true"></Label>
+                    </GridLayout>
+                    <AbsoluteLayout *ngIf="showPhoneNumber" height="20%">
+                        <Button top="40%" android:left="300%" ios:left="300%" width="20%" height="30%" text="Submit" (tap)="checkForm()" class="reg-next abel color-pink"></Button>
+                    </AbsoluteLayout>
+                </slide>
+            </slides>
+        </StackLayout>
+    
+
+    <!-- Activity Indicator -->
+    <StackLayout row='0' rowSpan="3" *ngIf="loadingMore" verticalAlignment="center">
+        <ActivityIndicator #activityIndicator [busy]="loadingMore" class="activity-indicator"></ActivityIndicator>
+    </StackLayout>
+
+    <!-- MODAL LAYOUT -->
+    <StackLayout row="0" rowSpan="3" [style.zIndex]="999" modal size="lg" alignment="middle" [dismissable]="true" [duration]="100" (open)="onOpenModal()" (close)="onCloseModal()">
+        <StackLayout *ngIf="permissionStatus" borderRadius="3" class="p-t-15" backgroundColor="white">
+            <!-- <ScrollView> -->
+            <Image src="res://flower" class="m-t-20 large-icon" horizontalAlignment="center"></Image>
+            <Label text="" textWrap="true" class="m-20" textAlignment="left">
+                <FormattedString>
+                    <Span text="Please Allow Us One Time Access To Your " textWrap="true" class="abel font-18"></Span>
+                    <Span text="Location " color="#fa4032" class="abel font-18" textWrap="true"></Span>
+                    <Span text="to show you relevant questions for your country." textWrap="true" class="abel font-18"></Span>
+                </FormattedString>
+            </Label>
+            <Label text="We do NOT track your location on an ongoing basis" textWrap="true" class="m-x-20 m-b-20 abel font-16"></Label>
+
+
+            <!-- <Label text="What would you like to do?" textWrap="true" class="text-muted left-padding-20 right-padding-20 p-y-5"></Label> -->
+
+            <GridLayout class="p-x-30 p-y-10" rows="auto" columns="auto, *" (tap)="permissionGranted()">
+                <Button col="0" row="0" class="modal-circle modal-color1 p-0" text="G"></Button>
+                <Label col="1" class="m-l-15 m-y-auto text-left modal-color1 font-16" text="Grant Permission"></Label>
+            </GridLayout>
+
+            <GridLayout class="p-x-30 p-y-10" rows="auto" columns="auto, *" (tap)="permissionRefused()">
+                <Button col="0" row="0" class="modal-circle modal-color2 p-0" text="R"></Button>
+                <Label col="1" class="m-l-15 m-y-auto text-left modal-color2 font-16" text="Refuse Permission"></Label>
+            </GridLayout>
+
+            <WrapLayout class="m-y-2 m-r-15 pull-right">
+                <Label (tap)="closeModal()" text="CANCEL" class="m-y-10 p-10 text-warning font-16"></Label>
+            </WrapLayout>
+        </StackLayout>
+
+        <!-- <StackLayout *ngIf="!permissionStatus" borderRadius="3" class="p-t-15" backgroundColor="white">
+            <Image src="res://flower" class="m-t-20 large-icon" horizontalAlignment="center"></Image>
+            <Label text="" textWrap="true" class="m-20" textAlignment="left">
+                <FormattedString>
+                    <Span text="We Need Your " textWrap="true" class="abel font-18"></Span>
+                    <Span text="Location " color="#fa4032" class="abel font-18" textWrap="true"></Span>
+                    <Span text="To Complete Registration" textWrap="true" class="abel font-18"></Span>
+                </FormattedString>
+            </Label>
+            <Label text="" textWrap="true" class="m-20" textAlignment="left">
+                <FormattedString>
+                    <Span text="To Enable " textWrap="true" class="abel font-18"></Span>
+                    <Span text="Location " color="#fa4032" class="abel font-18" textWrap="true"></Span>
+                    <Span text="Proceed To Settings On Your Phone and Enable Location Permission For demoerror" textWrap="true" class="abel font-18"></Span>
+                </FormattedString>
+            </Label>
+            <WrapLayout class="m-y-2 m-r-15 pull-right">
+                <Label (tap)="closeModal()" text="CANCEL" class="m-y-10 p-10 text-warning font-16"></Label>
+            </WrapLayout>
+        </StackLayout> -->
+    </StackLayout>
+
+</GridLayout>

@@ -1,0 +1,13 @@
+<ScrollView>
+    <GridLayout rows="auto auto auto auto" columns="30* 60* 30*" height="70%" ios:width="90%" class="">
+        <Image src="res://icon" row="1" col="1" class="m-t-20 icon" horizontalAlignment="center"></Image>
+        <Label row="2" text="" textWrap="true" col="0" colSpan="3" class="top-margin-20 m-x-20 m-y-20" textAlignment="center">
+            <FormattedString>
+                <Span text ="Please grant permissions to access location and messaging on your phone." class="abel font-16"></Span>
+            </FormattedString>
+        </Label>
+        <Button row="3" col="0" class="btn-orange abel top-margin-20 abel 12 m-t-15" text="Ok" (tap)="permissionGranted()"></Button>
+        <Button row="3" col="2" class="btn-orange abel top-margin-20 abel 12 m-t-15" text="Not Now" (tap)="permissionRefused()"></Button>
+
+    </GridLayout>
+</ScrollView>

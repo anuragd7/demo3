@@ -1,0 +1,25 @@
+<StackLayout class="hr-line">
+</StackLayout>
+<GridLayout class="tab-grid" columns="25*, 25*, 25*, 25*">
+    <GridLayout col="0" (tap)="changeTab(0)" rows="* 5* auto" class="m-t-2" height="100%">
+        <Label row="0" class="icomoon1 tab-align font-10" text=""></Label>
+        <Label row="1" class="icomoon1 tab-align font-24" [text]=" (this.selected === 0) ? '&#xe028;': '&#xe027;'" [ngClass]="{'tab-selected': selected === 0}"></Label>
+        <Label row="2" text="Tab1" class="tab-label-align font-12 abel" [ngClass]="{'tab-selected': selected === 0}"></Label>
+    </GridLayout>
+    <GridLayout col="1" (tap)="changeTab(1)" rows="* 5* auto" class="m-t-2">
+        <Label row="0" class="icomoon1 tab-align font-10" text=""></Label>
+        <Label row="1" class="icomoon1 tab-align font-24" [text]=" (this.selected === 1) ? '&#xe030;': '&#xe029;'" [ngClass]="{'tab-selected': selected === 1}"></Label>
+        <Label row="2" text="Tab2" class="tab-label-align font-12 abel" [ngClass]="{'tab-selected': selected === 1}"></Label>
+    </GridLayout>
+    <GridLayout col="2" (tap)="changeTab(2)" rows="* 2* auto" class="m-t-2">
+        <Label row="0" [visibility]="messagesNumber===0 ? 'visible' : 'collapsed'" class="icomoon1 tab-align font-10" text=""></Label>
+        <Button row="0" [visibility]="messagesNumber>0 ? 'visible' : 'collapsed'" class="tab-align circle-10" [text]="messagesNumberText"></Button>
+        <Label row="1" class="icomoon1 tab-align font-24" [text]=" (this.selected === 2) ? '&#xe032;': '&#xe031;'" [ngClass]="{'tab-selected': selected === 2}"></Label>
+        <Label row="2" text="Tab3" class="tab-label-align font-12 abel" [ngClass]="{'tab-selected': selected === 2}"></Label>
+    </GridLayout>
+    <GridLayout col="3" (tap)="changeTab(3)" rows="* 5* auto" class="m-t-2">
+        <Label row="0" class="icomoon1 tab-align font-10" text=""></Label>
+        <Label row="1" class="icomoon1 tab-align font-24" [text]=" (this.selected === 3) ? '&#xe035;': '&#xe033;'" [ngClass]="{'tab-selected': selected === 3    }"></Label>
+        <Label row="2" text="Tab4" class="tab-label-align font-12 abel" [ngClass]="{'tab-selected': selected === 3}"></Label>
+    </GridLayout>
+</GridLayout>
